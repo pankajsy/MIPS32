@@ -30,7 +30,9 @@ use ieee.std_logic_unsigned.all;
 --library unisim;
 --use unisim.vcomponents.all;
 entity controlunit is
-    port ( opcode : in  std_logic_vector (5 downto 0);
+    port ( 
+			  clk : in std_logic;	
+			  opcode : in  std_logic_vector (5 downto 0);
            func_code : in  std_logic_vector (2 downto 0);
            comparator : in  std_logic_vector (1 downto 0);
 			  is_load : out std_logic;
@@ -43,14 +45,14 @@ entity controlunit is
 end controlunit;
 
 architecture behavioral of controlunit is
-	signal is_load_sig : std_logic := '0';
+	signal is_load_sig : std_logic := '0';	
 	signal is_store_sig : std_logic := '0';
 	signal is_itype_sig : std_logic := '0';
 	signal is_rtype_sig : std_logic := '0';
 	
 begin
 
-process(opcode, func_code) begin
+process(clk, opcode, func_code) begin
   case opcode is
   when "000111" =>  alu_op_sel <= "000";
   when "001000" =>  alu_op_sel <= "000";
@@ -65,21 +67,21 @@ process(opcode, func_code) begin
   end case;
 end process;
 
-process(opcode) begin
+process(clk, opcode) begin
   case opcode is
   when "000111" =>  is_load_sig <= '1';
   when others => is_load_sig <= '0';
   end case;
 end process;
 
-process(opcode) begin
+process(clk, opcode) begin
   case opcode is
   when "001000" =>  is_store_sig <= '1';
   when others => is_store_sig <= '0';
   end case;
 end process;
 
-process(opcode) begin
+process(clk, opcode) begin
   case opcode is
   when "000000" =>  is_itype_sig <= '0';
   when "001100" =>  is_itype_sig <= '0';
@@ -89,7 +91,7 @@ process(opcode) begin
 end process;
 
 
-process(opcode) begin
+process(clk, opcode) begin
   case opcode is
   when "001000" =>  write_enable <= '0';
   when "001001" =>  write_enable <= '0';
@@ -101,11 +103,11 @@ process(opcode) begin
   end case;
 end process;
 
-process(opcode) begin
+process(clk, opcode, comparator) begin
   case opcode is
-  when "001001" =>  if (comparator = "00" or comparator = "01" or comparator = "10") then next_pc <= "11"; else next_pc <= "00";end if;
-  when "001010" =>  if (comparator = "00" or comparator = "01" or comparator = "10") then next_pc <= "11"; else next_pc <= "00";end if;
-  when "001011" =>  if (comparator = "00" or comparator = "01" or comparator = "10") then next_pc <= "11"; else next_pc <= "00";end if;
+  when "001001" =>  if (comparator = "01" or comparator = "10" or comparator = "11") then next_pc <= "11"; else next_pc <= "00";end if;
+  when "001010" =>  if (comparator = "01" or comparator = "10" or comparator = "11") then next_pc <= "11"; else next_pc <= "00";end if;
+  when "001011" =>  if (comparator = "01" or comparator = "10" or comparator = "11") then next_pc <= "11"; else next_pc <= "00";end if;
   when "001100" =>  next_pc <= "10";
   when "111111" =>  next_pc <= "01";
   when others => next_pc <= "00";
@@ -117,59 +119,4 @@ is_store <= is_store_sig;
 is_itype <= is_itype_sig;
 end behavioral;
 
---process(opcode) begin
---	if (opcode = "000000") then 
---		 is_rtype_sig<= '1';
---		 is_load_sig <= '0';
---		 is_store_sig <= '0';
---		 is_itype_sig <= '0';
---		 is_jump_sig <= '0';
---		 is_halt_sig <= '0';
---		 is_branch_sig <= '0';
---		 next_pc<="00";
---		    
---	elsif (opcode = "000111") then
---		 is_load_sig <= '1';
---		 is_rtype_sig<= '0';
---		 is_store_sig <= '0';
---		 is_itype_sig <= '0';
---		 is_jump_sig <= '0';
---		 is_halt_sig <= '0';
---		 is_branch_sig <= '0';
---		 next_pc<="00";
---		 alu_op_sel <= "000";
---	elsif (opcode = "101011") then
---		is_store_sig <= '1';
---	elsif (opcode = "001100") then
---		is_jump_sig <= '1';
---	elsif (opcode = "111111") then
---		is_halt_sig <= '1';
---	elsif (opcode = "001001" or opcode = "001010" or opcode = "001011") then
---		is_branch_sig <= '1';
---	elsif (opcode = "001100" and opcode = "111111" and opcode = "000000") then
---		is_itype_sig <= '0';	
---	else
---		is_itype_sig <= '1';
---	end if;
---	
---	if (is_store_sig = '1' or is_branch_sig = '1' or is_jump_sig = '1' or is_halt_sig = '1') then
---		write_enable <= '1';
---	else
---		write_enable <= '0';
---	
---	--if (is_rtype_sig = '0' and is_jump_sig = '0' and is_halt_sig = '0') then
---	
---	
---	if (is_branch_sig = '1' and (is_jump_sig = '0'))  then 
---		next_pc <= "11";
---	elsif (is_jump_sig = '1') then 
---		next_pc <= "10";
---	elsif (is_halt_sig = '1') then 
---		next_pc <= "01";
---	else
---		next_pc <= "00";
---	end if;
---	
---end process;
---
 

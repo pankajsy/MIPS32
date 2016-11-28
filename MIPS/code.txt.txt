@@ -1,0 +1,32 @@
+encryption:
+A = A + S[0];
+B = B + S[1];
+for i=1 to 12 do
+	A = ((A XOR B) <<< B) + S[2*i];
+	B = ((B XOR A) <<< A) + S[2*1+1];
+
+decryption
+
+for i=12 downto 1 do
+    B = ((B – S[2*i + 1] >>> A) XOR A;
+    A = ((A – S[2*i]) >>> B) XOR B;
+
+B = B – S[1];
+A = A – S[0];
+
+round key
+
+do 3*max(t, c); t=26, c=4
+	A = S[i] = (S[i] + A + B) <<< 3;
+	B = L[j] = (L[j] + A + B) <<< (A + B);
+	i = (i + 1) mod (t);
+	j = (j + 1) mod (c);
+
+i=0;j=0;
+do 78 times
+	{
+		A = S[i] = (S[i] + A + B) <<< 3;
+		B = L[j] = (L[j] + A + B) <<< (A + B);
+		i = (i + 1) mod 26;
+		j = (j + 1) mod 4;
+      	}
