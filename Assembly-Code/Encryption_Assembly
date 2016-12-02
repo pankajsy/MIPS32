@@ -7,84 +7,80 @@ ANDI R4, R4, #0000 -- Make R4 as 0000
 ADDI R4, R4, #C -- Add 12 to R4, R4 Acts as counter
 
 ANDI R5, R5, #0000 -- Make R5 as 0000
-ANDI R12, R12, #0000 -- Make R12 as 0000
 
-ADDI R13, R12, #0020 -- 32 in R13
- 
+
+
+ADDI R6, R5, #0020 -- 32 in R6
+
 ADD R0, R0, R2 --A=A+S[0]
 ADD R1, R1, R3 -- A=A+S[1]
 
 Loop:
-SUB R14,R13, R1 --32 -shift value for B
 
 
-NOR R6, R0,R5 -- NOT A
-NOR R7, R1,R5 -- NOT B
+NOR R8, R0,R5 -- NOT A
+NOR R9, R1,R5 -- NOT B
 
-AND R8,R0,R7 -- A.B'
-AND R9,R6,R1 -- A'.B
+AND R9,R0,R9 -- A.B'
+AND R8,R8,R1 -- A'.B
 
-OR R10, R8, R9 -- A_XOR_B Result
+OR R8, R8, R9 -- A_XOR_B Result
 
-ADD R11, R12, R1 --R11 Now has value of B
-ADD R17, R12, R14 -- R17 has the value of 32-B
+ADD R9, R1, R5 --R9 Now has value of B
+SUB R7,R6, R1 -- R7 has 32 -shift value for B
+
+--ADD R17, R12, R14 -- R17 has the value of 32-B
 
 Loop 1:
-SHL R16, R10, #0001 --Shift Left by 1 bit
-SUBI R11, R11, #0001 -- Decrement value of B
-BNE R11, R12, Loop1 -- Compare with 0 and Branch
+SHL R10, R8, #0001 --Shift Left by 1 bit
+SUBI R9, R9, #0001 -- Decrement value of B
+BNE R9, R5, Loop1 -- Compare with 0 and Branch
 
 Loop2:
-SHR R18, R10, #0001 -- Shift Right by 1 bit
-SUBI R17, R17, #0001 -- Decrement value of 32-B
-BNE R17, R12, Loop2 -- Compare with 0 and Branch
+SHR R11, R8, #0001 -- Shift Right by 1 bit
+SUBI R7, R7, #0001 -- Decrement value of 32-B
+BNE R7, R5, Loop2 -- Compare with 0 and Branch
 
-OR R19, R16, R18 -- Rotation Result
+OR R10, R10, R11 -- Rotation Result
 
 ADDI R3, R3,#0001
-LW R20, R3
-ADD R0, R19, R20 -- A is updated
+LW R11, R3
+ADD R0, R10, R11 -- A is updated
 
 
 --B starts--
-NOR R21, R0,R5 -- NOT A
-NOR R22, R1,R5 -- NOT B
 
-AND R23,R1,R21 -- B.A'
-AND R24,R22,R0 -- B'.A 
+NOR R8, R0,R5 -- NOT A
+NOR R9, R1,R5 -- NOT B
 
-OR R25, R23, R24 -- B_XOR_A Result
-ADD R26, R12, R0 --R26 Now has value of A
+AND R8,R1,R8 -- B.A'
+AND R9,R9,R0 -- B'.A 
 
-SUB R15,R0, R13 --32 -shift value for A
+OR R8, R8, R9 -- B_XOR_A Result
 
-ADD R27, R12, R15 -- R27 has the value of 32-A
+ADD R9, R0, R5 --R9 Now has value of A
 
+SUB R7,R6, R0 --R7 has 32 -shift value for A
 
 Loop 3:
-SHL R28, R25, #0001 --Shift Left by 1 bit
-SUBI R26, R26, #0001 -- Decrement value of A
-BNE R26, R12, Loop3 -- Compare with 0 and Branch
-
+SHL R10, R8, #0001 --Shift Left by 1 bit
+SUBI R9, R9, #0001 -- Decrement value of A
+BNE R9, R5, Loop3 -- Compare with 0 and Branch
 
 Loop4:
-SHR R29, R25, #0001 -- Shift Right by 1 bit
-SUBI R27, R27, #0001 -- Decrement value of 32-A
-BNE R27, R12, Loop2 -- Compare with 0 and Branch
+SHR R11, R8, #0001 -- Shift Right by 1 bit
+SUBI R7, R7, #0001 -- Decrement value of 32-A
+BNE R7, R5, Loop4 -- Compare with 0 and Branch
 
-OR R30, R28, R29 -- Rotation Result
+OR R10, R10, R11 -- Rotation Result
 
-ADDI R3, R3,#0001
-LW R31, R3
-ADD R1, R31, R30 -- B is updated
+ADDI R3, R3,#0001 --increment S value
+LW R11, R3 -- Load S value in R11
+ADD R1, R10, R11 -- B is updated
 
-BNE R4, R12, Loop --Compare R4 with 0 and Branch 
+BNE R4, R5, Loop --Compare R4 with 0 and Branch 
 
-ADDI R3, R3,#0001
-SW R0, R3
-ADDI R3, R3,#0001
-SW R1, R3 
-
-
- 
-
+ADDI R3, R3,#0001 -- move one address after S values end
+SW R0, R3 -- Store A
+ADDI R3, R3,#0001 --Move one address ahead
+SW R1, R3 -- Store B 
