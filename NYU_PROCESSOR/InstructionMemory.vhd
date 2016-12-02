@@ -19,50 +19,54 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.STD_LOGIC_SIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 entity InstructionMemory is
-
-port (
-			input_address : in STD_LOGIC_VECTOR(31 downto 0);			
-         output_instruction : out STD_LOGIC_VECTOR (31 downto 0);
-			clk : in STD_LOGIC;
-			rst : in STD_LOGIC
-		
-		);
-
+		 port ( input_address 	: in STD_LOGIC_VECTOR(31 downto 0);			
+				  clk : in STD_LOGIC;
+				  write_enable		: in std_logic;
+				  instruction		: in STD_LOGIC_VECTOR(31 downto 0);	
+				  rst 				: in STD_LOGIC;
+				  current_inp_instruction: out STD_LOGIC_VECTOR (31 downto 0);
+				  output_instruction : out STD_LOGIC_VECTOR (31 downto 0));
 end InstructionMemory;
 
 architecture Behavioral of InstructionMemory is
 
-type RAM is array (0 to 31) of STD_LOGIC_VECTOR (31 downto 0);
-SIGNAL instruction_memory: RAM := (others => (others => '0'));
+	type RAM is array (0 to 255) of STD_LOGIC_VECTOR (31 downto 0);
+	SIGNAL instruction_memory: RAM;
 
-signal temp_instruction : STD_LOGIC_VECTOR(31 downto 0) := x"00000100";
-signal temp_address : STD_LOGIC_VECTOR(31 downto 0) := x"00000001";
+	--signal temp_instruction : STD_LOGIC_VECTOR(31 downto 0); --:= x"00000100";
+	--signal temp_address : STD_LOGIC_VECTOR(31 downto 0);-- := x"00000001";
 
 begin
 
-process (clk, rst) begin
-	if (rising_edge(clk)) then
-		if (rst='1') then 
-		instruction_memory <= (others => (others => '0'));
-		instruction_memory(CONV_INTEGER(temp_address)) <= temp_instruction;
-		else		
-		output_instruction <= instruction_memory(CONV_INTEGER(input_address)); 		 			
+	process (input_address, rst, instruction, write_enable, clk) begin
+		if (rising_edge(clk)) then
+			if (rst='1') then 
+				instruction_memory <= (others => (others => '0'));
+			else
+				if(write_enable = '1') then
+					instruction_memory(CONV_INTEGER(input_address)) <= instruction;
+				else		
+					output_instruction <= instruction_memory(CONV_INTEGER(input_address));
+  		 			
+				end if;
+			end if;	
 		end if;
-	end if;	
-end process;
+	end process;
 
+--	process (input_address, instruction, write_enable, clk) begin
+--		if (rising_edge(clk)) then
+--				if(write_enable = '1') then		
+--					instruction_memory(CONV_INTEGER(input_address)) <= instruction;
+--					
+--  		 		elsif write_enable = '0' then
+--					output_instruction <= instruction_memory(CONV_INTEGER(input_address));
+--			end if;	
+--		end if;
+--	end process;
+	current_inp_instruction <= instruction_memory(CONV_INTEGER(input_address));
 end Behavioral;
 

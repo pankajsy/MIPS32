@@ -21,43 +21,28 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx primitives in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 entity sign_extend is
-
-Port ( input  : in  STD_LOGIC_VECTOR (15 downto 0);
-       output : out  STD_LOGIC_VECTOR (31 downto 0)
-		);
-
+		 Port ( input  : in  STD_LOGIC_VECTOR (15 downto 0);
+				  output : out  STD_LOGIC_VECTOR (31 downto 0));
 end sign_extend;
-
-
 
 architecture Behavioral of sign_extend is
 
-signal extend0 : STD_LOGIC_VECTOR (15 downto 0) := (others => '0');
-signal extend1 : STD_LOGIC_VECTOR (15 downto 0) := (others => '1');
+	signal extend0 : STD_LOGIC_VECTOR (15 downto 0) := (others => '0');
+	signal extend1 : STD_LOGIC_VECTOR (15 downto 0) := (others => '1');
 
 begin
 
-process (input) begin
-case input(15) is
+	process (input, extend0, extend1) begin
+	case input(15) is
 
-when '0' => output <= extend0 & input;
-when '1' => output <= extend1 & input;
-when others => null;
+	when '0' => output <= extend0 & input;
+	when '1' => output <= extend1 & input;
+	when others => null;
 
-end case;
+	end case;
 
-end process;
+	end process;
 
-
-end Behavioral;
+end architecture;
 
