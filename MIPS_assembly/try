@@ -1,0 +1,49 @@
+ADDI R1, R0, 1 --CONST 1
+ADDI R3, R0, 12 --UP COUNT 12
+ADDI R1, R1, 1 --UPCOUNTER 1-12
+ADDI R4, R0, 32 --CONST 32
+ADDI R10, R0, 0
+ADDI R20, R0, 0
+--ADDI R21, R0, 1 --DIN LSB 32 - B
+--ADDI R22, R0, 0 --DIN LSB 32 - A
+--SW R21, 0(R10) --B
+--SW R22, 1(R10) --A
+
+LW R5, 0(R10) --B
+LW R6, 1(R10) --A
+
+
+SHL R15, R1, 1 -- (2i)
+LW R16, R15(R20) --s(2i)
+ADD R17, R15, R1 --(2i+1)
+LW R18, R17(R20) --S(2i+1)
+
+SUB R19, R5, R18 -- [B - S(2i-1)]
+SHR R21, R19, R6
+OR R22, R21, R19 --[B - S(2i-1)]>>A
+
+--B = ((B – S[2*i + 1] >>> A) XOR A
+AND R11, R22, R6
+NOR R12, R22, R6
+OR R?B, R11, R12
+
+SUB R23, R6, R16 -- [A - S(2i)]
+SHR R24, R23, R?B
+OR R25, R24, R23 --A = [A - S(2i)]>>B
+
+--A = ((A – S[2*i]) >>> B) XOR B
+AND R13, R25, R?B
+NOR R14, R25, R?
+OR R?A, R13, R14
+
+BNE R1, R3, 2 --NOT 12
+
+SUBI RFB, R?B, 2(R10) --S[1]
+SUBI RFA, R?A, 3(R10) --S[0]
+BNE R1, R3, 1 --GOES TO HALT
+
+JMP
+
+HAL
+
+ 
