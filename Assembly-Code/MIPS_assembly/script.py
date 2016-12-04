@@ -92,17 +92,17 @@ def convert(string):
                 return None
             try:
                 no = int(contents[3])
+                no = format(no if no >= 0 else (1 << 16) + no, '016b')
                 if no > 65535:
-                    print "Not a valid 16-bit No. 2"
-                    return None
+                    print "Not a valid 16-bit No. coz its negative 2"
             except ValueError:
                 print "Invalid 16-bit Number  2"
                 return None
             instBinarySeq += instruction
             instBinarySeq += binaryConvert(registerNo)
             instBinarySeq += binaryConvert(registerNo2)
-            instBinarySeq += binaryConvert(no, 1)
-            print "Opcode-" + instruction + " Rs-" + binaryConvert(registerNo) + " Rt-" + binaryConvert(registerNo2)+ " Imm-" + binaryConvert(no, 1)
+            instBinarySeq += no
+            print "Opcode-" + instruction + " Rs-" + binaryConvert(registerNo) + " Rt-" + binaryConvert(registerNo2)+ " Imm-" + no
             print binarytoHex(instBinarySeq)
             return binarytoHex(instBinarySeq)
         print "Invalid Command 2"
