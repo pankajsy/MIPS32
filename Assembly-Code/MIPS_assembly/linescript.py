@@ -138,7 +138,7 @@ readfile = open('MIPS.txt', "r")
 
 while inputStringline != "HAL":
     inputStringline = readfile.readline().rstrip('\n')
-    print "\n"+inputStringline
+    print inputStringline
     commandLine = convert(inputStringline)
     if commandLine == None:
        continue;
