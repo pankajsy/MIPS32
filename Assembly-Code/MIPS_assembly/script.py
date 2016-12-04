@@ -99,7 +99,7 @@ def convert(string):
             instBinarySeq += "00000"
             instBinarySeq += Fuct
             # return instBinarySeq
-            print instBinarySeq
+            print "Opcode-"+instruction+" Rs-"+binaryConvert(registerNo)+" Rt-"+binaryConvert(registerNo2)+" Rd-"+binaryConvert(registerNo3)+ " Shamt-00000" + " funcode-"+Fuct
             return binarytoHex(instBinarySeq)
 
         if contents[0] in ["LW", "SW", "BEQ","BLT", "BNE", "ADDI", "SUBI", "ANDI", "ORI", "SHL", "SHR"]:
@@ -135,7 +135,7 @@ def convert(string):
             instBinarySeq += binaryConvert(registerNo)
             instBinarySeq += binaryConvert(registerNo2)
             instBinarySeq += binaryConvert(no, 1)
-            print instBinarySeq
+            print "Opcode-" + instruction + " Rs-" + binaryConvert(registerNo) + " Rt-" + binaryConvert(registerNo2)+ " Imm-" + binaryConvert(no, 1)
             return binarytoHex(instBinarySeq)
         print "Invalid Command 2"
         return None
@@ -154,12 +154,15 @@ def convert(string):
                 return None
             instBinarySeq += instruction
             instBinarySeq += binaryConvert(no, 2)
+            print "Opcode-"+instruction+"Imm-"+ binaryConvert(no, 2)
         elif contents[0] == "HAL":
-            instBinarySeq += "11111100000000000000000000000000"
+            instBinarySeq += "111111"
+            instBinarySeq += "00000000000000000000000000"
+            print "Opcode-111111" + " Rs-00000000000000000000000000"
         else:
             print "Invalid Command 3"
             return None
-        print instBinarySeq
+
 
         return binarytoHex(instBinarySeq)
 
