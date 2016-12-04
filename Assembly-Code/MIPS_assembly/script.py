@@ -183,8 +183,8 @@ while inputString != "END":
 
 print "\n".join(string)
 
-chdir('Scripts/')
-Filename = raw_input("Name of  File")
+chdir('script/')
+Filename = raw_input("Name of  File ")
 f = file(Filename + ".txt", 'w')
 fileContents = ''
 print str(len(string))
