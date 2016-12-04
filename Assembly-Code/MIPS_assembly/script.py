@@ -73,10 +73,10 @@ def convert(string):
                 registerNo = int(contents[2][1:])
 
                 assert contents[3][0] == 'R'
-                registerNo2 = int(contents[1][1:])
+                registerNo2 = int(contents[3][1:])
 
                 assert contents[1][0] == 'R'
-                registerNo3 = int(contents[2][1:])
+                registerNo3 = int(contents[1][1:])
 
                 if registerNo > 31 or registerNo < 0 or registerNo2 > 31 or registerNo2 < 0 or registerNo3 > 31 or registerNo3 < 0:
                     print "Invalid Register No."
