@@ -95,7 +95,7 @@ begin
 	  case opcode is
 	  when "001001" =>  if (comparator = "11") then next_pc <= "11"; else next_pc <= "00"; end if;
 	  when "001010" =>  if (comparator = "01") then next_pc <= "11"; else next_pc <= "00"; end if;
-	  when "001011" =>  if (comparator = "10") then next_pc <= "11"; else next_pc <= "00"; end if;
+	  when "001011" =>  if ((comparator = "10") or (comparator = "11")) then next_pc <= "11"; else next_pc <= "00"; end if;
 	  when "001100" =>  next_pc <= "10";
 	  when "111111" =>  next_pc <= "01";
 	  when others => next_pc <= "00";

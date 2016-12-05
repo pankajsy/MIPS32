@@ -54,7 +54,7 @@ architecture Structural of NYU_6463_Processor is
 	--Instruction Memory
 	component InstructionMemory is
 		 port ( input_address 	: in STD_LOGIC_VECTOR(31 downto 0);			
-				  clk : in STD_LOGIC;
+				  --clk : in STD_LOGIC;
 				  write_enable		: in std_logic;
 				  instruction		: in STD_LOGIC_VECTOR(31 downto 0);	
 				  rst 				: in STD_LOGIC;
@@ -117,6 +117,7 @@ architecture Structural of NYU_6463_Processor is
 				 inp_2 : in  STD_LOGIC_VECTOR(31 downto 0);
 				 inp_3 : in  STD_LOGIC_VECTOR(31 downto 0);
 			    ctrl  : in STD_LOGIC_VECTOR(1 downto 0);
+				 rst	 : in STD_LOGIC;
              output : out  STD_LOGIC_VECTOR(31 downto 0));
 	end component;
 	
@@ -231,7 +232,7 @@ begin
 										port map(PC_out_sig, Inst_Mem_Wr_addr, Inst_Mem_Wr_en, Inst_Mem_inp_addr_sig);			 
 						 
 	Ins_MEM 	: 	InstructionMemory
-					port map(Inst_Mem_inp_addr_sig, clk, Inst_Mem_Wr_en, Inst_Mem_Wr_data, reset, current_inp_instruction, Instruction_sig);
+					port map(Inst_Mem_inp_addr_sig, Inst_Mem_Wr_en, Inst_Mem_Wr_data, reset, current_inp_instruction, Instruction_sig);
 											  
 	Reg_File	:	RegisterFile
 					port map(Rs_address_sig, Rt_address_sig, Write_Reg_Address_sig, write_data_Reg_File_sig, write_enable_sig, clk, reset, OP_1_Rs_sig, Op_2_Rt_sig);
@@ -274,7 +275,7 @@ begin
 	--dummy_sig <= Instruction_sig(15);
 	
 	Mux_NextPC	:	MUX_32bit_4x1
-						port map(PC_Plus_1_sig, PC_Halt_sig, PC_Jump_sig, PC_Itype_Branch_sig, Ctrl_Next_PC_signal, Next_PC_signal );
+						port map(PC_Plus_1_sig, PC_Halt_sig, PC_Jump_sig, PC_Itype_Branch_sig, Ctrl_Next_PC_signal, PC_reset, Next_PC_signal );
 
 	Compare	:	Comparator
 					port map(OP_1_Rs_sig, Op_2_Rt_sig, reset, comparator_out_sig);

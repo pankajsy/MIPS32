@@ -24,7 +24,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity InstructionMemory is
 		 port ( input_address 	: in STD_LOGIC_VECTOR(31 downto 0);			
-				  clk : in STD_LOGIC;
+				  --clk : in STD_LOGIC;
 				  write_enable		: in std_logic;
 				  instruction		: in STD_LOGIC_VECTOR(31 downto 0);	
 				  rst 				: in STD_LOGIC;
@@ -42,8 +42,8 @@ architecture Behavioral of InstructionMemory is
 
 begin
 
-	process (input_address, rst, instruction, write_enable, clk) begin
-		if (rising_edge(clk)) then
+	process (input_address, rst, instruction, write_enable) begin
+		--if (rising_edge(clk)) then
 			if (rst='1') then 
 				instruction_memory <= (others => (others => '0'));
 			else
@@ -54,7 +54,7 @@ begin
   		 			
 				end if;
 			end if;	
-		end if;
+		--end if;
 	end process;
 
 --	process (input_address, instruction, write_enable, clk) begin

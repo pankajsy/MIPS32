@@ -26,20 +26,37 @@ entity MUX_32bit_4x1 is
 				 inp_2 : in  STD_LOGIC_VECTOR(31 downto 0);
 				 inp_3 : in  STD_LOGIC_VECTOR(31 downto 0);
 			    ctrl  : in STD_LOGIC_VECTOR(1 downto 0);
+				 rst	 : in STD_LOGIC;
              output : out  STD_LOGIC_VECTOR(31 downto 0));
 end MUX_32bit_4x1;
 
 architecture Behavioral of MUX_32bit_4x1 is
 
 begin
-	process(ctrl, inp_0, inp_1, inp_2, inp_3)
+	process(ctrl, inp_0, inp_1, inp_2, inp_3, rst)
 	begin
 	 
 		case ctrl is 
-		when "00" =>	output <= inp_0;							
-		when "01" => 	output <= inp_1;						
-		when "10" => 	output <= inp_2; 					
-		when "11" => 	output <= inp_3;						
+		when "00" =>	if (rst='1') then
+								output <= x"00000000"; 
+							else
+								output <= inp_0; end if;
+								
+		when "01" => 	if (rst='1') then
+								output <= x"00000000"; 
+							else
+								output <= inp_1; end if;
+								
+		when "10" => 	if (rst='1') then
+								output <= x"00000000"; 
+							else
+								output <= inp_2; end if;
+								
+		when "11" => 	if (rst='1') then
+								output <= x"00000000"; 
+							else
+								output <= inp_3; end if;
+								
 		when others => NULL;
 		end case;
 		

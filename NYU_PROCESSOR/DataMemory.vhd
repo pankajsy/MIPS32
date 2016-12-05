@@ -34,7 +34,10 @@ end DataMemory;
 
 architecture Behavioral of DataMemory is
 
-	type RAM is array (0 to 255) of STD_LOGIC_VECTOR (31 downto 0);
+	--type RAM is array (0 to 255) of STD_LOGIC_VECTOR (31 downto 0);
+	--SIGNAL data_memory: RAM:= (others => (others => '0'));
+	
+	type RAM is array (0 to 63) of STD_LOGIC_VECTOR (31 downto 0);
 	SIGNAL data_memory: RAM:= (others => (others => '0'));
 
 begin
@@ -42,7 +45,22 @@ begin
 	process (write_enable, rst, input_address, write_data) begin
 		--if (rising_edge(clk)) then
 			if (rst='1') then 
-				data_memory <= (others => (others => '0'));
+				data_memory <= (x"9BBBD8C8", x"1A37F7FB", x"46F8E8C5", x"460C6085", 
+										x"70F83B8A", x"284B8303", x"513E1454", x"F621ED22",
+										x"3125065D", x"11A83A5D", x"D427686B", x"713AD82D",
+										x"4B792F99", x"2799A4DD", x"A7901C49", x"DEDE871A",
+										x"36C03196", x"A7EFC249", x"61A78BB8", x"3B0A1D2B",
+										x"4DBFCA76", x"AE162167", x"30D76B0A", x"43192304",
+										x"F6CC1431", x"65046380", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"00000001", x"00000000",
+										x"00000000", x"00000000", x"00000001", x"00000000",
+										x"00000000", x"00000000", x"00000001", x"00000000",
+										x"00000000", x"00000000", x"00000001", x"00000000",
+										x"00000000", x"00000000", x"00000001", x"00000000",
+										x"00000000", x"00000000", x"00000001", x"00000000",
+										x"00000000", x"00000000", x"00000001", x"00000000",
+										x"00000000", x"00000000", x"00000001", x"00000000",
+										x"00000000", x"00000000", x"00000001", x"00000000");
 			else
 				if(write_enable='1') then		
 					data_memory(CONV_INTEGER(input_address)) <= write_data; 		 			
@@ -58,4 +76,3 @@ begin
 	end process;	
 
 end architecture;
-
