@@ -4,7 +4,7 @@ LW R1 R31 31 --Can make it 46? --B12
 	
 ADDI R30 R31 26 -- intitialize R30 with 26
 ADDI R4 R31 12 -- made counter with 12
-ADDI R5 R31 32 -- 32 in R6
+ADDI R5 R31 32 -- 32 in R5
 
 Loop:
 SUBI R30 R30 1
