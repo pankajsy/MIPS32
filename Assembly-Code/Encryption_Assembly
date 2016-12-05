@@ -1,86 +1,79 @@
-LW R0, #0000 --Load A
-LW R1, #0001 -- Load B
-LW R2, #0002 --Load S0
-LW R3, #0003 --Load S1
+ANDI R31 R31 0 
+LW R0 R31 30 
+LW R1 R31 31
+LW R2 R31 0 
+LW R3 R31 1 --Load S1
+// 4 -> s2
 
-ANDI R4, R4, #0000 -- Make R4 as 0000
-ADDI R4, R4, #C -- Add 12 to R4, R4 Acts as counter
+ADDI R30 R31 1
 
-ANDI R5, R5, #0000 -- Make R5 as 0000
-
-
-
-ADDI R6, R5, #0020 -- 32 in R6
+ADDI R4 R31 12 -- Add 12 to R4, R4 Acts as counter
+ADDI R6, R31 32 -- 32 in R6
 
 ADD R0, R0, R2 --A=A+S[0]
 ADD R1, R1, R3 -- A=A+S[1]
 
 Loop:
+AND R8 R0 R1
+NOR R9 R0 R1
+NOR R8 R8 R9 --R8 has A_XOR_B
 
+ADD R10 R8 R31 -- Store A_Xor_B in R10
+ADD R11 R8 R31 -- Store A_Xor_B in R11
 
-NOR R8, R0,R5 -- NOT A
-NOR R9, R1,R5 -- NOT B
+ANDI R9 R1 31 -- Truncated B
 
-AND R9,R0,R9 -- A.B'
-AND R8,R8,R1 -- A'.B
-
-OR R8, R8, R9 -- A_XOR_B Result
-
-ADD R9, R1, R5 --R9 Now has value of B
-SUB R7,R6, R1 -- R7 has 32 -shift value for B
-
---ADD R17, R12, R14 -- R17 has the value of 32-B
+ANDI R7 R1 31 -- Truncated B for 31 -shift 
+SUB R7,R6, R7 -- R7 has 32 -shift value for B
 
 Loop 1:
-SHL R10, R8, #0001 --Shift Left by 1 bit
-SUBI R9, R9, #0001 -- Decrement value of B
-BNE R9, R5, Loop1 -- Compare with 0 and Branch
+SHL R10, R10,1 --Shift Left by 1 bit
+SUBI R9, R9,1 -- Decrement value of B
+BNE R9, R31, Loop1 -- Compare with 0 and Branch
 
 Loop2:
-SHR R11, R8, #0001 -- Shift Right by 1 bit
-SUBI R7, R7, #0001 -- Decrement value of 32-B
-BNE R7, R5, Loop2 -- Compare with 0 and Branch
+SHR R11, R11,1 -- Shift Right by 1 bit
+SUBI R7, R7,1 -- Decrement value of 32-B
+BNE R7, R31,Loop2 -- Compare with 0 and Branch
 
 OR R10, R10, R11 -- Rotation Result
 
-ADDI R3, R3,#0001
-LW R11, R3
-ADD R0, R10, R11 -- A is updated
+ADDI R30, R30,1 -- R30 S(2i)
+LW R11, R30 0
+ADD R0, R10, R11 -- A(i) is updated
+------------------------------------------------------------------------------------
+AND R8 R1 R0
+NOR R9 R1 R0
+NOR R8 R8 R9 B0_XOR_A1 
+
+ADD R10 R8 R31 -- Store B_Xor_A in R10
+ADD R11 R8 R31 -- Store B_Xor_A in R11
 
 
---B starts--
+ANDI R9 R0 31 -- Truncated A 
 
-NOR R8, R0,R5 -- NOT A
-NOR R9, R1,R5 -- NOT B
-
-AND R8,R1,R8 -- B.A'
-AND R9,R9,R0 -- B'.A 
-
-OR R8, R8, R9 -- B_XOR_A Result
-
-ADD R9, R0, R5 --R9 Now has value of A
-
-SUB R7,R6, R0 --R7 has 32 -shift value for A
+ANDI R7 R0 31 --A truncated for 32- shift
+SUB R7,R6, R7 --R7 has 32 -shift value for A
 
 Loop 3:
-SHL R10, R8, #0001 --Shift Left by 1 bit
-SUBI R9, R9, #0001 -- Decrement value of A
-BNE R9, R5, Loop3 -- Compare with 0 and Branch
+SHL R10, R10,1 --Shift Left by 1 bit
+SUBI R9, R9,1 -- Decrement value of A
+BNE R9, R31,Loop3 -- Compare with 0 and Branch
 
 Loop4:
-SHR R11, R8, #0001 -- Shift Right by 1 bit
+SHR R11, R11, #0001 -- Shift Right by 1 bit
 SUBI R7, R7, #0001 -- Decrement value of 32-A
-BNE R7, R5, Loop4 -- Compare with 0 and Branch
+BNE R7, R31, Loop4 -- Compare with 0 and Branch
 
 OR R10, R10, R11 -- Rotation Result
 
-ADDI R3, R3,#0001 --increment S value
-LW R11, R3 -- Load S value in R11
-ADD R1, R10, R11 -- B is updated
+ADDI R30, R30 1 --increment S value
+LW R11 R30 0 -- Load S value in R11
+ADD R1, R10, R11 -- B(i) is updated
 
-BNE R4, R5, Loop --Compare R4 with 0 and Branch 
+SUBI R4 R4 1
+BNE R4, R31, Loop --Compare R4 with 0 and Branch 
 
-ADDI R3, R3,#0001 -- move one address after S values end
-SW R0, R3 -- Store A
-ADDI R3, R3,#0001 --Move one address ahead
-SW R1, R3 -- Store B 
+ADDI R30, R30,1 -- move one address after S values end
+SW R0, R30 20 -- Store A
+SW R1 R30 21 -- Store B 
