@@ -5,13 +5,13 @@ ADDI R0 R31 0 // A = 0
 ADDI R1 R31 0 // B = 0
 ADDI R2 R31 0 // I = 0
 ADDI R3 R31 0 // J = 0
-
+loop
 ADD R4 R0 R1 //A+B
 LW R5 R2 0 // S(0)
 ADD R4 R4 R5 // S(0)+A+B
 
-ADD R6 R4 R31 //A
-ADD R7 R4 R31 //A
+ADD R6 R4 R31 //A backup
+ADD R7 R4 R31 //A bachup
 ADDI R8 R31 3 // LEFT ROTATE BY 3
 
 SHL R6 R6 1 --Shift Left by 1 bit
@@ -24,7 +24,7 @@ SHR R7 R7 1 -- Shift Right by 1 bit
 SUBI R8 R8 1 -- Decrement 
 BNE R8 R31 -3 -- Compare 
 
-OR R0 R6 R7 // FINAL A = S[i] = (S[i] + A + B) <<< 3;
+OR R0 R6 R7 // FINAL A1 = S[i] = (S[i] + A + B) <<< 3;
 
 ADD R9 R0 R1 // A1 + B0
 LW R10 R3 0 // L(J)
