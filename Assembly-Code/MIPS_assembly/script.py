@@ -21,6 +21,8 @@ def binaryConvert(no, select=0):
         noB = noB / 2
     if select == 1:
         allowedLength = 16
+    elif select == 3:
+        allowedLength = 8
     elif select == 2:
         allowedLength = 26
     else:
@@ -29,9 +31,9 @@ def binaryConvert(no, select=0):
         binarySeq = "0" + binarySeq
     return binarySeq
 
-def binarytoHex(binarySeq):
+def binarytoHex(binarySeq, rnge=8):
     Hex = ""
-    for i in range(8):
+    for i in range(rnge):
         Hex += b2Hex[binarySeq[4 * i : 4 * i + 4]]
     return Hex
 
@@ -146,10 +148,31 @@ while inputStringline != "HAL":
 readfile.close()
 Filename = raw_input("Name of  File ")
 f = file('script/'+Filename + ".txt", 'w')
-fileContents = ''
+fileContents1 = "force -freeze sim:/nyu_6463_processor/clk 1 0, 0 {50000 ps} -r {100 ns}\n"+\
+               "force -freeze sim:/nyu_6463_processor/reset 1 0\n"+\
+               "force -freeze sim:/nyu_6463_processor/PC_reset 1 0\n"+\
+               "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_en 1 0"+\
+               "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h0 0\n"+\
+               "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h0 0\n"+\
+               "run 100ns\n"+\
+               "force -freeze sim:/nyu_6463_processor/reset 0 0\n"+\
+               "force -freeze sim:/nyu_6463_processor/PC_reset 0 0\n"
+fileContents = ""
 for i in range(len(finalstring)):
-    fileContents += finalstring[i]+"\n"
-f.write(fileContents)
+    # fileContents += finalstring[i]+"\n"
+    # im = binaryConvert(int(i) ,3)
+    imx = binarytoHex(binaryConvert(int(i) ,3), 2)
+    fileContents += "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h"+str(imx)+" 0\n"+\
+    "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h"+str(finalstring[i])+" 0\n"+\
+    "run 100ns\n"
+
+fileContents3 ="force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_en 0 0\n"+\
+"force -freeze sim:/nyu_6463_processor/PC_reset 1 0\n"+\
+"run 100ns\n"+\
+"force -freeze sim:/nyu_6463_processor/PC_reset 0 0\n"+\
+"run 100ns\n"
+
+f.write(fileContents1+fileContents+fileContents3)
 f.close()
 print "End"
 
