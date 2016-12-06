@@ -1,0 +1,61 @@
+ADDI R31 R31 0 // 0
+ADDI R28 R31 78 // DO 78 TIMES
+ADDI R27 R31 32 // FOR SHIFT
+ADDI R0 R31 0 // A = 0
+ADDI R1 R31 0 // B = 0
+ADDI R2 R31 0 // I = 0
+ADDI R3 R31 0 // J = 0
+
+ADD R4 R0 R1 //A+B
+LW R5 R2 0 // S(0)
+ADD R4 R4 R5 // S(0)+A+B
+
+ADD R6 R4 R31 //A
+ADD R7 R4 R31 //A
+ADDI R8 R31 3 // LEFT ROTATE BY 3
+
+SHL R6 R6 1 --Shift Left by 1 bit
+SUBI R8 R8 1 -- Decrement 
+BNE R8 R31 -3 -- Compare 
+
+ADDI R8 R31 3
+
+SHR R7 R7 1 -- Shift Right by 1 bit
+SUBI R8 R8 1 -- Decrement 
+BNE R8 R31 -3 -- Compare 
+
+OR R0 R6 R7 // FINAL A = S[i] = (S[i] + A + B) <<< 3;
+
+ADD R9 R0 R1 // A1 + B0
+LW R10 R3 0 // L(J)
+ADD R11 R10 R9 // L(j)+A+B
+
+ADD R12 R11 R31 -- BACKUP----------START OF B'S ROTATE
+ADD R13 R11 R31 -- BACKUP
+
+ANDI R14 R9 31 -- Truncated A1+B0(TOBE ROTATED VALUE)
+
+ANDI R15 R9 31 -- Truncated A1+BO for 31-shift
+SUB R15 R27 R15 -- R7 has 32-shift value for A1+B0
+
+SHL R12 R12 1 --Shift Left by 1 bit
+SUBI R14 R14 1 -- Decrement 
+BNE R14 R31 -3 -- Compare 
+
+SHR R13 R13 1 -- Shift Right by 1 bit
+SUBI R15  R15 1 -- Decrement
+BNE R15 R31 -3-- Compare
+
+OR R1 R12 R13 --// B = L[j] = (L[j] + A + B) <<< (A + B);
+
+ADDI R2 R2 1 // INCREMENT I
+ADDI R3 R3 1 // INCREMENT J
+
+ANDI R2 R2 26 // i =(i+1) mod 26  basically truncated
+ANDI R3 R3 4 // j =(j+1) mod 4
+
+SUBI R28 R28 1 // DECREMENT 78 LOOP
+BNE R28 R31 (?)  // CHECK 78 LOOP
+SW R0 R31 100 // FINAL A IN 100
+SW R1 R31 101 // FINAL B IN 101
+HAL
