@@ -1,0 +1,76 @@
+ANDI R31 R31 0
+LW R0 R31 40 --Can make it 45? --A12
+LW R1 R31 41 --Can make it 46? --B12
+	
+ADDI R30 R31 36 -- intitialize R30 with 26
+ADDI R4 R31 12 -- made counter with 12
+ADDI R5 R31 32 -- 32 in R5
+
+Loop:
+SUBI R30 R30 1
+LW R3 R30 0 --R3 has S(2i+1) 
+SUB R1 R1 R3 -- B-S(2i+1)
+
+ADD R8 R1 R31 -- Copy of B in R8
+ADD R9 R1 R31 -- Copy of B in R9
+
+ANDI R6 R0 31 -- Truncated A
+SUB R7 R5 R6 --Truncated 32-A
+
+Loop 1:
+SHR R8, R8, 1 --Shift Right by 1 bit
+SUBI R6, R6, 1 -- Decrement value of A
+BNE R6, R31, -3 -- Compare with 0 and Branch (go back to loop 1)
+
+Loop2:
+SHL R9, R9,1 -- Shift Left by 1 bit
+SUBI R7, R7,1 -- Decrement value of 32-A
+BNE R7, R31,Loop2 -- Compare with 0 and Branch
+
+OR R8 R8 R9 -- Rotation Result
+
+AND R9 R8 R0 -- b_rot and A
+NOR R10 R8 R0 -- b_rot nor A 
+NOR R1 R9 R10 --R1 has b_rot XOR A Also B updated in same step
+
+
+SUBI R30 R30 1
+LW R3 R30 0 --R3 has S(2i) 
+SUB R0 R0 R3 -- A-S(2i)
+
+ADD R8 R0 R31 -- Copy of A in R8
+ADD R9 R0 R31 -- Copy of A in R9
+ 
+ANDI R6 R1 31 -- Truncated B
+SUB R7 R5 R6 --Truncated 32-B
+
+Loop 3:
+SHR R8, R8,1 --Shift Right by 1 bit
+SUBI R6, R6,1 -- Decrement value of B
+BNE R6, R31, -3 -- Compare with 0 and Branch
+
+Loop4:
+SHL R9, R9,1 -- Shift Left by 1 bit
+SUBI R7, R7,1 -- Decrement value of 32-B
+BNE R7, R31, -3 -- Compare with 0 and Branch
+
+OR R8 R8 R9 -- Rotation Result
+
+AND R9 R8 R1 -- a_rot and B
+NOR R10 R8 R1 -- a_rot nor B 
+NOR R0 R9 R10 --R0 has a_rot XOR B Also A updated in same step
+
+SUBI R4 R4 1
+BNE R4 R31 Loop
+
+SUBI R30 R30 1
+LW R3 R30 0
+SUB R1 R1 R3
+
+SUBI R30 R30 1
+LW R3 R30 0
+SUB R0 R0 R3
+
+SW R0 R31 42
+SW R1 R31 43
+HAL
