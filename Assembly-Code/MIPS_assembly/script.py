@@ -156,12 +156,15 @@ fileContents1 = "force -freeze sim:/nyu_6463_processor/clk 1 0, 0 {50000 ps} -r 
                "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h0 0\n"+\
                "run 100ns\n"+\
                "force -freeze sim:/nyu_6463_processor/reset 0 0\n"+\
-               "force -freeze sim:/nyu_6463_processor/PC_reset 0 0\n"
+               "force -freeze sim:/nyu_6463_processor/PC_reset 0 0\n"+\
+                "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h00 0\n"+\
+                "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h00000000 0\n"+\
+                "run 100ns\n"
 fileContents = ""
 for i in range(len(finalstring)):
     # fileContents += finalstring[i]+"\n"
     # im = binaryConvert(int(i) ,3)
-    imx = binarytoHex(binaryConvert(int(i) ,3), 2)
+    imx = binarytoHex(binaryConvert(int(i+1) ,3), 2)
     fileContents += "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h"+str(imx)+" 0\n"+\
     "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h"+str(finalstring[i])+" 0\n"+\
     "run 100ns\n"
