@@ -148,7 +148,9 @@ while inputStringline != "HAL":
 readfile.close()
 Filename = raw_input("Name of  File ")
 f = file('script/'+Filename + ".txt", 'w')
-fileContents1 = "force -freeze sim:/nyu_6463_processor/clk 1 0, 0 {50000 ps} -r {100 ns}\n"+\
+fileContents1 = "add wave -noupdate -format Literal /Ins_MEM/instruction_memory\n"+\
+				"add wave -noupdate -format Literal /Data_MEM/data_memory\n"+\
+				"force -freeze sim:/nyu_6463_processor/clk 1 0, 0 {50000 ps} -r {100 ns}\n"+\
                "force -freeze sim:/nyu_6463_processor/reset 1 0\n"+\
                "force -freeze sim:/nyu_6463_processor/PC_reset 1 0\n"+\
                "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_en 1 0\n"+\
@@ -156,15 +158,15 @@ fileContents1 = "force -freeze sim:/nyu_6463_processor/clk 1 0, 0 {50000 ps} -r 
                "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h0 0\n"+\
                "run 100ns\n"+\
                "force -freeze sim:/nyu_6463_processor/reset 0 0\n"+\
-               "force -freeze sim:/nyu_6463_processor/PC_reset 0 0\n"+\
-                "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h00 0\n"+\
-                "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h00000000 0\n"+\
-                "run 100ns\n"
+               "force -freeze sim:/nyu_6463_processor/PC_reset 0 0\n"
+                #"force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h00 0\n"+\
+                #"force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h00000000 0\n"+\
+                #"run 100ns\n"
 fileContents = ""
 for i in range(len(finalstring)):
     # fileContents += finalstring[i]+"\n"
     # im = binaryConvert(int(i) ,3)
-    imx = binarytoHex(binaryConvert(int(i+1) ,3), 2)
+    imx = binarytoHex(binaryConvert(int(i) ,3), 2)
     fileContents += "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h"+str(imx)+" 0\n"+\
     "force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h"+str(finalstring[i])+" 0\n"+\
     "run 100ns\n"
