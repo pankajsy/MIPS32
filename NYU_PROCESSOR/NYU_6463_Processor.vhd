@@ -283,7 +283,7 @@ begin
 	Decoder	:	controlunit
 					port map(opcode, func_code, comparator_out_sig, load_sig, store_sig, Itype_sig, Ctrl_Next_PC_signal, write_enable_sig, ALU_operation_sig);
 		 
-	PC_Jump_sig <= PC_Plus_1_sig(31 downto 28) & Instruction_sig(25 downto 0) & "00";
+	PC_Jump_sig <= PC_Plus_1_sig(31 downto 26) & Instruction_sig(25 downto 0);
 	
 	write_data_Data_Mem_sig <=  Op_2_Rt_sig;
 	

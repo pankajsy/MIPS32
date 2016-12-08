@@ -42,7 +42,8 @@ architecture Behavioral of InstructionMemory is
 
 begin
 
-	process (input_address, rst, instruction, write_enable) begin
+	--process (input_address, rst, instruction, write_enable) begin
+	process ( rst, input_address, write_enable) begin
 		--if (rising_edge(clk)) then
 			if (rst='1') then 
 				instruction_memory <= (others => (others => '0'));
