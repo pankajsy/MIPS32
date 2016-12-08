@@ -155,12 +155,18 @@ force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h30 0
 force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h00030011 0
 run 100ns
 force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h31 0
-force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h23E0002A 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h07ED0026 0
 run 100ns
 force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h32 0
-force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h23E1002B 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h21A00000 0
 run 100ns
 force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h33 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h05AD0001 0
+run 100ns
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h34 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h21A10000 0
+run 100ns
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h35 0
 force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'hFC000000 0
 run 100ns
 

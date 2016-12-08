@@ -19,7 +19,7 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_SIGNED.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity DataMemory is
@@ -42,37 +42,44 @@ architecture Behavioral of DataMemory is
 
 begin
 
-	process (write_enable, rst, input_address, write_data) begin
+	process (read_enable, write_enable, data_memory, rst, input_address, write_data) begin
 		--if (rising_edge(clk)) then
 			if (rst='1') then 
-				data_memory <= (x"9BBBD8C8", x"1A37F7FB", x"46F8E8C5", x"460C6085", 
-										x"70F83B8A", x"284B8303", x"513E1454", x"F621ED22",
-										x"3125065D", x"11A83A5D", x"D427686B", x"713AD82D",
-										x"4B792F99", x"2799A4DD", x"A7901C49", x"DEDE871A",
-										x"36C03196", x"A7EFC249", x"61A78BB8", x"3B0A1D2B",
-										x"4DBFCA76", x"AE162167", x"30D76B0A", x"43192304",
-										x"F6CC1431", x"65046380", x"00000000", x"00000000",
-										x"00000000", x"00000000", x"00000001", x"00000000",
-										x"00000000", x"00000000", x"00000001", x"00000000",
-										x"00000000", x"00000000", x"00000001", x"00000000",
-										x"00000000", x"00000000", x"00000001", x"00000000",
-										x"00000000", x"00000000", x"00000001", x"00000000",
-										x"00000000", x"00000000", x"00000001", x"00000000",
-										x"00000000", x"00000000", x"00000001", x"00000000",
-										x"00000000", x"00000000", x"00000001", x"00000000",
-										x"00000000", x"00000000", x"00000001", x"00000000");
+				data_memory <= (	x"00000000", x"00000000", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"B7E15163", x"5618cb1c", 
+										x"f45044d5", x"9287be8e", x"30bf3847", x"cef6b200", 
+										x"6d2e2bb9", x"0b65a572", x"a99d1f2b", x"47d498e4", 
+										x"e60c129d", x"84438c56", x"227b060f", x"c0b27fc8", 
+										x"5ee9f981", x"fd21733a", x"9b58ecf3", x"399066ac", 
+										x"d7c7e065", x"75ff5a1e", x"1436d3d7", x"b26e4d90", 
+										x"50a5c749", x"eedd4102", x"8d14babb", x"2b4c3474", 
+										x"00000000", x"00000000", x"00000000", x"00000000", 
+										x"00000000", x"00000000", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"00000000", x"00000000");
+			
 			else
-				if(write_enable='1') then		
-					data_memory(CONV_INTEGER(input_address)) <= write_data; 		 			
+				
+				if(write_enable = '1' and read_enable = '1') then
+					output_data <= write_data;
+					data_memory(CONV_INTEGER(input_address)) <= write_data;
+				elsif(write_enable='1') then		
+					data_memory(CONV_INTEGER(input_address)) <= write_data;
+				elsif (read_enable='1') then
+					output_data <= data_memory(CONV_INTEGER(input_address));	 			
 				end if;
 			end if;
 		--end if;	
 	end process;
 
-	process (read_enable, data_memory, input_address) begin
-		if (read_enable='1') then
-			output_data <= data_memory(CONV_INTEGER(input_address));	 
-		end if;
-	end process;	
+--	process (read_enable, data_memory, input_address) begin
+--		if (read_enable='1') then
+--			output_data <= data_memory(CONV_INTEGER(input_address));	 
+--		end if;
+--	end process;	
 
 end architecture;
