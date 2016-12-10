@@ -1,0 +1,28 @@
+add wave -noupdate -format Literal /Ins_MEM/instruction_memory
+add wave -noupdate -format Literal /Data_MEM/data_memory
+force -freeze sim:/nyu_6463_processor/clk 1 0, 0 {50000 ps} -r {100 ns}
+force -freeze sim:/nyu_6463_processor/reset 1 0
+force -freeze sim:/nyu_6463_processor/PC_reset 1 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_en 1 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h0 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h0 0
+run 100ns
+force -freeze sim:/nyu_6463_processor/reset 0 0
+force -freeze sim:/nyu_6463_processor/PC_reset 0 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h00 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h04010007 0
+run 100ns
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h01 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h04020008 0
+run 100ns
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h02 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h00221810 0
+run 100ns
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h03 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'hFC000000 0
+run 100ns
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_en 0 0
+force -freeze sim:/nyu_6463_processor/PC_reset 1 0
+run 100ns
+force -freeze sim:/nyu_6463_processor/PC_reset 0 0
+run 100ns

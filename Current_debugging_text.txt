@@ -1,0 +1,12 @@
+force -freeze sim:/nyu_6463_processor/clk 1 0, 0 {250 ns} -r {500 ns}
+force -freeze sim:/nyu_6463_processor/reset 1 0
+force -freeze sim:/nyu_6463_processor/PC_reset 1 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_en 0 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_addr 32'h0 0
+force -freeze sim:/nyu_6463_processor/Inst_Mem_Wr_data 32'h0 0
+run 500ns
+force -freeze sim:/nyu_6463_processor/reset 0 0
+force -freeze sim:/nyu_6463_processor/PC_reset 1 0
+run 500ns
+force -freeze sim:/nyu_6463_processor/PC_reset 0 0
+run 500ns
