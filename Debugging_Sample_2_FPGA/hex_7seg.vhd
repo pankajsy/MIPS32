@@ -32,6 +32,7 @@ entity hex_7seg is
 		 port (CLK				: in std_logic;
 				 DATA				: in std_logic_vector(31 downto 0);
 				 DIGIT_ENABLE	: in std_logic_vector(7 downto 0);
+				 led : out std_logic_vector (15 downto 0);
 				 SSEG_CA			: out std_logic_vector(7 downto 0);
 				 SSEG_AN			: out std_logic_vector(7 downto 0));
 end hex_7seg;
@@ -46,11 +47,22 @@ architecture behaviour of hex_7seg is
     -- A clock to strobe the 7-segment LED anodes and a counter for it
     signal sseg_clk: std_logic := '0';
     signal sseg_counter: integer := 0;
-
+    
+	 --signal DATA: std_logic_vector(31 downto 0);
 begin
     -- We need a slow running clock to strobe the anodes, so here is
     -- a process to generate this clock
-    sseg_clock_process: process(CLK)
+    
+	 
+--	 process (clk) begin
+--	 if (DATA1 = x"0000000A") then
+--	 DATA <= DATA1;
+--	 led <= DATA1(15 downto 0);
+--	 end if;
+--	 
+--	 end process;
+	 
+	 sseg_clock_process: process(CLK)
         begin
             if (rising_edge(CLK)) then
                 if (sseg_counter = 0) then
