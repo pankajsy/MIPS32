@@ -45,7 +45,8 @@ signal out_data_rt_sig : std_logic_vector(31 downto 0):= (others => '0');
 begin
 
 	--process ( write_enable, rst, write_address, write_data, clk) begin
-	process (write_address, rst, write_enable, write_data, clk, register_file) begin
+	--process (write_address, rst, write_enable, write_data, clk, register_file) begin
+	process (clk) begin
 		if (clk'event and clk='1') then
 			if (rst='1') then 
 									register_file <= (	x"00000000", x"00000000", x"00000000", x"00000000",
@@ -70,7 +71,7 @@ begin
 	--out_data_rs_sig <= register_file(CONV_INTEGER(read_address_rs));
 	--out_data_rt_sig <= register_file(CONV_INTEGER(read_address_rt));
 					
-	process (read_address_rs, read_address_rt, write_data, clk, write_address)
+	process (clk)
 	begin
 --		if (rst='1') then out_data_rs_sig <= x"00000000";
 --								out_data_rt_sig <= x"00000000"; 
