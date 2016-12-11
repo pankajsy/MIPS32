@@ -63,14 +63,14 @@ begin
 			end if;
 		end if;	
 	end process;
-	
+	--register_file(CONV_INTEGER(write_address)) <= write_data;
 	out_data_rs <= out_data_rs_sig;
 	out_data_rt <= out_data_rt_sig;
 	
 	--out_data_rs_sig <= register_file(CONV_INTEGER(read_address_rs));
 	--out_data_rt_sig <= register_file(CONV_INTEGER(read_address_rt));
 					
-	process (read_address_rs, read_address_rt, register_file)
+	process (read_address_rs, read_address_rt, write_data, clk, write_address)
 	begin
 --		if (rst='1') then out_data_rs_sig <= x"00000000";
 --								out_data_rt_sig <= x"00000000"; 
