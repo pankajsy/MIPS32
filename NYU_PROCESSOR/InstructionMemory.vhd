@@ -34,7 +34,7 @@ end InstructionMemory;
 
 architecture Behavioral of InstructionMemory is
 
-	type RAM is array (0 to 255) of STD_LOGIC_VECTOR (31 downto 0);
+	type RAM is array (0 to 63) of STD_LOGIC_VECTOR (31 downto 0);
 	SIGNAL instruction_memory: RAM;
 
 	--signal temp_instruction : STD_LOGIC_VECTOR(31 downto 0); --:= x"00000100";
@@ -46,7 +46,22 @@ begin
 	process ( rst, input_address, write_enable) begin
 		--if (rising_edge(clk)) then
 			if (rst='1') then 
-				instruction_memory <= (others => (others => '0'));
+				instruction_memory  <= (	x"04010007", x"04020008", x"00221810", x"FC000000",
+										x"00000000", x"00000000", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"00000000", x"00000000", 
+										x"00000000", x"00000000", x"00000000", x"00000000", 
+										x"00000000", x"00000000", x"00000000", x"00000000", 
+										x"00000000", x"00000000", x"00000000", x"00000000", 
+										x"00000000", x"00000000", x"00000000", x"00000000", 
+										x"00000000", x"00000000", x"00000000", x"00000000", 
+										x"00000000", x"00000000", x"00000000", x"00000000", 
+										x"00000000", x"00000000", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"00000000", x"00000000",
+										x"00000000", x"00000000", x"00000000", x"00000000");
 			else
 				if(write_enable = '1') then
 					instruction_memory(CONV_INTEGER(input_address)) <= instruction;

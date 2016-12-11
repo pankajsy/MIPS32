@@ -36,10 +36,13 @@ entity NYU_6463_Processor is
 				  reset 				: in  STD_LOGIC;
 				  PC_reset			: in 	std_logic;
 				  Inst_Mem_Wr_en	: in 	std_logic;
-				  Inst_Mem_Wr_addr: in 	std_logic_vector(31 downto 0);
-				  Inst_Mem_Wr_data: in 	std_logic_vector(31 downto 0);
-				  output				: out std_logic_vector(31 downto 0));
+				  --Inst_Mem_Wr_addr: in 	std_logic_vector(31 downto 0);
+				  --Inst_Mem_Wr_data: in 	std_logic_vector(31 downto 0);
+				  --output				: out std_logic_vector(31 downto 0);
+				  SSEG_CA			: out std_logic_vector(7 downto 0);
+				  SSEG_AN			: out std_logic_vector(7 downto 0));
 end NYU_6463_Processor;
+
 
 architecture Structural of NYU_6463_Processor is
 
@@ -155,6 +158,14 @@ architecture Structural of NYU_6463_Processor is
 		 Port ( input  : in  STD_LOGIC_VECTOR (15 downto 0);
 				  output : out  STD_LOGIC_VECTOR (31 downto 0));
 	end component;
+	
+	component hex_7seg is
+		 port (CLK				: in std_logic;
+				 DATA				: in std_logic_vector(31 downto 0);
+				 DIGIT_ENABLE	: in std_logic_vector(7 downto 0);
+				 SSEG_CA			: out std_logic_vector(7 downto 0);
+				 SSEG_AN			: out std_logic_vector(7 downto 0));
+	end component;
 
 	--Signals being used in the design
 	--********************************************************************************************
@@ -223,16 +234,16 @@ begin
 	Rt_address_sig <= Instruction_sig(20 downto 16);
 	Rd_address_sig <= Instruction_sig(15 downto 11);
 	
-	output <= ALU_output_sig;
+	--output <= ALU_output_sig;
 	
 	PC			:	ProgramCounter
 					port map(PC_inp_sig, clk, PC_reset, PC_out_sig);
 					
 	Mux_Inst_MEM_Read_write	:	MUX_2_1_32bit
-										port map(PC_out_sig, Inst_Mem_Wr_addr, Inst_Mem_Wr_en, Inst_Mem_inp_addr_sig);			 
+										port map(PC_out_sig, x"00000000", Inst_Mem_Wr_en, Inst_Mem_inp_addr_sig);			 
 						 
 	Ins_MEM 	: 	InstructionMemory
-					port map(Inst_Mem_inp_addr_sig, Inst_Mem_Wr_en, Inst_Mem_Wr_data, reset, current_inp_instruction, Instruction_sig);
+					port map(Inst_Mem_inp_addr_sig, Inst_Mem_Wr_en, x"00000000", reset, current_inp_instruction, Instruction_sig);
 											  
 	Reg_File	:	RegisterFile
 					port map(Rs_address_sig, Rt_address_sig, Write_Reg_Address_sig, write_data_Reg_File_sig, write_enable_sig, clk, reset, OP_1_Rs_sig, Op_2_Rt_sig);
@@ -289,6 +300,15 @@ begin
 	
 	PC_Halt_sig <= Next_PC_signal;
 	PC_inp_sig <= Next_PC_signal;
+	
+	Display: hex_7seg
+				port map(
+								CLK => clk,
+								DATA => data_memory_(31 downto 0),
+								DIGIT_ENABLE => "11111111",
+								SSEG_CA => SSEG_CA,
+								SSEG_AN => SSEG_AN
+							);
 
 end architecture;
 

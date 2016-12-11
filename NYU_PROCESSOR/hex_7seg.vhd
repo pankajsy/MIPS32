@@ -50,10 +50,14 @@ architecture behaviour of hex_7seg is
 begin
     -- We need a slow running clock to strobe the anodes, so here is
     -- a process to generate this clock
-    sseg_clock_process: process(CLK)
+    
+	 
+	 
+	 
+	 sseg_clock_process: process(button)
         begin
             if (rising_edge(CLK)) then
-                if (sseg_counter = 0) then
+					 if (sseg_counter = 0) then
                     sseg_counter <= 10000;
                     -- Toggle sseg_clk each time counter resets
                     sseg_clk <= not(sseg_clk);
