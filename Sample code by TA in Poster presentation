@@ -1,3 +1,42 @@
+
+// function f=2xy+1 multiply two vectors.
+// algorithm
+// for (i=0,i<n; i++)
+//	{
+//		f= 2*x[0]*y[0]+1
+//	}
+// assembly code is as follows
+		ADDI R7,R0,16	// address pointer for f
+		ADDI R3,R0,8	// no of iteration 8
+		ADDI R1,R0,0	// addess pointer for x
+		ADDI R2,R0,8	// address pointer for y
+LOOPN:	LW R4,0(R1)		// load x
+		LW R5,0(R2)		// load y
+		JMP MUL 		// multiply
+BACK:	SHL R6,R6,1		// 2*xy
+		ADDI R6,R6,1	// 2*xy+1
+		SW R6,0(R7)		// store f
+		ADDI R7,R0,1	// increment address pointer of f
+		ADDI R1,R0,1	// increment address pointer of x
+		ADDI R2,R0,1	// increment address pointer of y
+		ADDI R3,R0,-1	// decrement the loop count by 1
+		BNE R3,R0,LOOPN	// check whether the loop count is equal to zero
+		HALT
+
+// Multiply code
+// R6 = R4 x R5
+// Here we add R4 R5 times to get the multiply output
+// 4*3= 4+4+4=12
+
+MUL:	ANDI R6,R6,0		//initialize R6
+LOOP1:	ADD R6,R6,R4		// add R4
+		ADDI R5,R5,-1		// decrement R5
+		BNE R5,R0,LOOP1
+		JMP BACK			// loop back to program
+t1.txt
+Open with
+Displaying t1.txt.
+-----------------------------------------------------------------------------------
 ADDI R7 R0 16
 ADDI R3 R0 8
 ADDI R1 R0 0
